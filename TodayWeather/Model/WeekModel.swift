@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+struct WeekModel{
+    var week : [Items]
+}
+
+struct DayModel{
+    var day : [WeekModel] // size of day = 7
+}
+
+struct MonthModel{
+    
+}
