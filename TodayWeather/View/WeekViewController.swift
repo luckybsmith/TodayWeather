@@ -20,8 +20,9 @@ class WeekViewController: UIViewController {
     var Model : WeatherModel?
     var max : Double?
     var min : Double?
-    var weekModel : WeekModel?
     
+    var dayModel = DayModel()
+ 
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var weekPicker: UIDatePicker!
@@ -68,13 +69,10 @@ class WeekViewController: UIViewController {
                 let weatherModel = try JSONDecoder().decode(WeatherModel.self, from: data)
                 self.Model = weatherModel
                 for i in 0 ... ((self.Model?.response.body.totalCount ?? 48) - 1) {
-                    print(self.Model?.response.body.items.item[i])
-                    self.weekModel?.week.append((self.Model?.response.body.items)!)
-                    
+                    self.dayModel.temparatureArray.append(self.Model?.response.body.items.item[i].ta ?? "1")
                 }
                 self.calculateExtreme()
-                print(self.Model?.response.body.totalCount) //168
-                print(self.weekModel)
+                print("day model : ",self.dayModel.temparatureArray)
                 
             }catch{
                 print(error)
