@@ -18,29 +18,40 @@ class WeekViewController: UIViewController {
     var dataType = "JSON"
     var numberOfRows = "168"
     var Model : WeatherModel?
-    var max : Double?
-    var min : Double?
-    
-    var dayModel = DayModel()
+    var highTAarr : [Double] = []
+    var lowTAarr : [Double] = []
+   
  
+    var selectedDate : Int = 0
+    var selectedWeek : [Int] = [1,2,3,4,5,6,7]
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var weekPicker: UIDatePicker!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        weekPicker.maximumDate = .now
+        
         tableView.dataSource = self
         tableView.delegate = self
         
-        fetchData()
-        
+        fetchData(startdate: Int(startDate) ?? 20220101)
         
     }
     
  
     @IBAction func weekPicker(_ sender: Any) {
-        startDate = ""
-        endDate = ""
+       
+         let date = self.weekPicker.date
+         let dateFormatter = DateFormatter()
+         dateFormatter.dateFormat = "YYYYMMdd"
+         let dateString = dateFormatter.string(from: date)
+        print(dateString)
+        selectedDate = Int(dateString) ?? 0
+        dateFormmater(selectedDate: selectedDate)
+        tableView.reloadData()
+     
+        fetchData(startdate: selectedDate)
+         
     }
     
     func calculateExtreme(){
@@ -50,16 +61,27 @@ class WeekViewController: UIViewController {
         }
         var intTemp : [Double] = Temparature.map{ Double($0) ?? 0 }
         intTemp.sort()
-        min = intTemp.first
-        max = intTemp.last
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
         
     }
-
-    func fetchData(){
-        let urlString = address + "?ServiceKey=" + serviceKey + "&dataCd=ASOS&dateCd=HR&startDt=" + startDate + "&startHh=" + startHour + "&endDt=" + endDate + "&endHh=" + endHour + "&stnIds=" + stationID + "&dataType=" + dataType + "&numOfRows=" + numberOfRows
+    func dateFormmater (selectedDate : Int){
+        selectedWeek = []
+        selectedWeek.append(selectedDate)
+        selectedWeek.append(selectedDate + 1)
+        selectedWeek.append(selectedDate + 2)
+        selectedWeek.append(selectedDate + 3)
+        selectedWeek.append(selectedDate + 4)
+        selectedWeek.append(selectedDate + 5)
+        selectedWeek.append(selectedDate + 6)
+        
+    }
+    func fetchData(startdate : Int){
+        
+        var dayModel = DayModel()
+        
+        let urlString = address + "?ServiceKey=" + serviceKey + "&dataCd=ASOS&dateCd=HR&startDt=" + startdate.description + "&startHh=" + startHour + "&endDt=" + (startdate + 6).description + "&endHh=" + endHour + "&stnIds=" + stationID + "&dataType=" + dataType + "&numOfRows=" + numberOfRows
         
         guard let url = URL(string: urlString) else {return}
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -69,10 +91,21 @@ class WeekViewController: UIViewController {
                 let weatherModel = try JSONDecoder().decode(WeatherModel.self, from: data)
                 self.Model = weatherModel
                 for i in 0 ... ((self.Model?.response.body.totalCount ?? 48) - 1) {
-                    self.dayModel.temparatureArray.append(self.Model?.response.body.items.item[i].ta ?? "1")
+                    dayModel.temparatureArray.append(self.Model?.response.body.items.item[i].ta ?? "1")
                 }
                 self.calculateExtreme()
-                print("day model : ",self.dayModel.temparatureArray)
+                let doubleArr = dayModel.forMatter(arr: dayModel.temparatureArray)
+                
+                let doubleDimensionArray = dayModel.transformToWeek(arr: doubleArr)
+                //print("doubleDimensionArray : " , doubleDimensionArray)
+                
+                self.lowTAarr = dayModel.calculateDayMin(arr: doubleDimensionArray)
+                self.highTAarr = dayModel.calculateDayMax(arr: doubleDimensionArray)
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                
                 
             }catch{
                 print(error)
@@ -84,15 +117,15 @@ class WeekViewController: UIViewController {
 
 extension WeekViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return self.highTAarr.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeekCell", for: indexPath) as? WeekCell else {return UITableViewCell()}
         
-        cell.date.text = startDate
-        cell.HighTA.text = max?.description
-        cell.LowTA.text = min?.description
+        cell.date.text = selectedWeek[indexPath.row].description
+        cell.HighTA.text = highTAarr[indexPath.row].description
+        cell.LowTA.text = lowTAarr[indexPath.row].description
         return cell
     }
     
