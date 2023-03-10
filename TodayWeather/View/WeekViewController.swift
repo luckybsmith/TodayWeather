@@ -68,15 +68,11 @@ class WeekViewController: UIViewController {
     }
     func dateFormmater (selectedDate : Int){
         selectedWeek = []
-        selectedWeek.append(selectedDate)
-        selectedWeek.append(selectedDate + 1)
-        selectedWeek.append(selectedDate + 2)
-        selectedWeek.append(selectedDate + 3)
-        selectedWeek.append(selectedDate + 4)
-        selectedWeek.append(selectedDate + 5)
-        selectedWeek.append(selectedDate + 6)
-        
+        for i in 0 ... 6 {
+            selectedWeek.append(selectedDate + i)
+        }
     }
+    
     func fetchData(startdate : Int){
         
         var dayModel = DayModel()

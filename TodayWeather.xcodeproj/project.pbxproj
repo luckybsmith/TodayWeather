@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		062F639029B81380009C30EB /* WeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062F638F29B81380009C30EB /* WeekViewController.swift */; };
-		062F639229B8138A009C30EB /* MonthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062F639129B8138A009C30EB /* MonthViewController.swift */; };
 		062F639429B8169C009C30EB /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062F639329B8169C009C30EB /* NetworkModel.swift */; };
 		062F639829B81A2A009C30EB /* ExtremeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062F639729B81A2A009C30EB /* ExtremeModel.swift */; };
 		062F639A29B859F2009C30EB /* WeekModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062F639929B859F2009C30EB /* WeekModel.swift */; };
@@ -43,7 +42,6 @@
 
 /* Begin PBXFileReference section */
 		062F638F29B81380009C30EB /* WeekViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekViewController.swift; sourceTree = "<group>"; };
-		062F639129B8138A009C30EB /* MonthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthViewController.swift; sourceTree = "<group>"; };
 		062F639329B8169C009C30EB /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		062F639729B81A2A009C30EB /* ExtremeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtremeModel.swift; sourceTree = "<group>"; };
 		062F639929B859F2009C30EB /* WeekModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekModel.swift; sourceTree = "<group>"; };
@@ -93,7 +91,6 @@
 			children = (
 				063CED1929B702050000E45F /* MainViewController.swift */,
 				062F638F29B81380009C30EB /* WeekViewController.swift */,
-				062F639129B8138A009C30EB /* MonthViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -308,7 +305,6 @@
 				063CED4729B702250000E45F /* WeatherModel.swift in Sources */,
 				063CED1829B702050000E45F /* SceneDelegate.swift in Sources */,
 				062F639429B8169C009C30EB /* NetworkModel.swift in Sources */,
-				062F639229B8138A009C30EB /* MonthViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
